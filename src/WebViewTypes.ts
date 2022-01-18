@@ -12,24 +12,28 @@ import {
   NativeScrollEvent,
 } from 'react-native';
 
-type WebViewCommands = 'goForward' | 'goBack' | 'reload' | 'stopLoading' | 'postMessage' | 'injectJavaScript' | 'loadUrl' | 'requestFocus';
+type WebViewCommands =
+  | 'goForward'
+  | 'goBack'
+  | 'reload'
+  | 'stopLoading'
+  | 'postMessage'
+  | 'injectJavaScript'
+  | 'loadUrl'
+  | 'requestFocus';
 
 type AndroidWebViewCommands = 'clearHistory' | 'clearCache' | 'clearFormData';
 
-
-
 interface RNCWebViewUIManager<Commands extends string> extends UIManagerStatic {
-  getViewManagerConfig: (
-    name: string,
-  ) => {
-    Commands: {[key in Commands]: number};
+  getViewManagerConfig: (name: string) => {
+    Commands: { [key in Commands]: number };
   };
 }
 
-export type RNCWebViewUIManagerAndroid = RNCWebViewUIManager<WebViewCommands | AndroidWebViewCommands>
-export type RNCWebViewUIManagerIOS = RNCWebViewUIManager<WebViewCommands>
-
-
+export type RNCWebViewUIManagerAndroid = RNCWebViewUIManager<
+  WebViewCommands | AndroidWebViewCommands
+>;
+export type RNCWebViewUIManagerIOS = RNCWebViewUIManager<WebViewCommands>;
 
 type WebViewState = 'IDLE' | 'LOADING' | 'ERROR';
 
@@ -50,17 +54,13 @@ interface ErrorState extends BaseState {
 export type State = NormalState | ErrorState;
 
 // eslint-disable-next-line react/prefer-stateless-function
-declare class NativeWebViewIOSComponent extends Component<
-  IOSNativeWebViewProps
-> {}
+declare class NativeWebViewIOSComponent extends Component<IOSNativeWebViewProps> {}
 declare const NativeWebViewIOSBase: Constructor<NativeMethodsMixin> &
   typeof NativeWebViewIOSComponent;
 export class NativeWebViewIOS extends NativeWebViewIOSBase {}
 
 // eslint-disable-next-line react/prefer-stateless-function
-declare class NativeWebViewAndroidComponent extends Component<
-  AndroidNativeWebViewProps
-> {}
+declare class NativeWebViewAndroidComponent extends Component<AndroidNativeWebViewProps> {}
 declare const NativeWebViewAndroidBase: Constructor<NativeMethodsMixin> &
   typeof NativeWebViewAndroidComponent;
 export class NativeWebViewAndroid extends NativeWebViewAndroidBase {}
@@ -118,9 +118,8 @@ export interface WebViewHttpError extends WebViewNativeEvent {
 
 export type WebViewEvent = NativeSyntheticEvent<WebViewNativeEvent>;
 
-export type WebViewProgressEvent = NativeSyntheticEvent<
-  WebViewNativeProgressEvent
->;
+export type WebViewProgressEvent =
+  NativeSyntheticEvent<WebViewNativeProgressEvent>;
 
 export type WebViewNavigationEvent = NativeSyntheticEvent<WebViewNavigation>;
 
@@ -145,7 +144,11 @@ export type DataDetectorTypes =
 
 export type OverScrollModeType = 'always' | 'content' | 'never';
 
-export type CacheMode = 'LOAD_DEFAULT' | 'LOAD_CACHE_ONLY' | 'LOAD_CACHE_ELSE_NETWORK' | 'LOAD_NO_CACHE';
+export type CacheMode =
+  | 'LOAD_DEFAULT'
+  | 'LOAD_CACHE_ONLY'
+  | 'LOAD_CACHE_ELSE_NETWORK'
+  | 'LOAD_NO_CACHE';
 
 export interface WebViewSourceUri {
   /**
@@ -502,7 +505,6 @@ export interface AndroidWebViewProps extends WebViewSharedProps {
    */
   geolocationEnabled?: boolean;
 
-  
   /**
    * Boolean that sets whether JavaScript running in the context of a file
    * scheme URL should be allowed to access content from other file scheme URLs.
@@ -590,6 +592,11 @@ export interface AndroidWebViewProps extends WebViewSharedProps {
    * Sets ability to open fullscreen videos on Android devices.
    */
   allowsFullscreenVideo?: boolean;
+
+  /**
+   * Ignore Ssl errors.
+   */
+  ignoreSslErrors?: boolean;
 }
 
 export interface WebViewSharedProps extends ViewProps {

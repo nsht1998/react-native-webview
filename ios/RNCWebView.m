@@ -763,6 +763,24 @@ static NSDictionary* customCertificatesForHost;
             }
         }
     }
+
+    if ([[challenge protectionSpace] serverTrust] != nil && _ignoreSslErrors) {
+      NSURLCredential * credential = [[NSURLCredential alloc] initWithTrust:[[challenge protectionSpace] serverTrust]];
+      completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+      return;
+    }
+
+    if (_onHttpError) {
+      NSMutableDictionary<NSString *, id> *event = [self baseEvent];
+      [event addEntriesFromDictionary: @{
+        @"url": host,
+        @"statusCode": @(0),
+        @"description": @"SSL error"
+      }];
+
+      _onHttpError(event);
+    }
+
     completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
 }
 

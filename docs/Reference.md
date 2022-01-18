@@ -75,6 +75,7 @@ This document lays out the current public properties and methods for the React N
 - [`clearCache`](Reference.md#clearCache)
 - [`clearHistory`](Reference.md#clearHistory)
 - [`requestFocus`](Reference.md#requestFocus)
+
 ---
 
 # Reference
@@ -215,7 +216,7 @@ Example:
 ```jsx
 <WebView
   source={{ uri: 'https://facebook.github.io/react-native' }}
-  onError={syntheticEvent => {
+  onError={(syntheticEvent) => {
     const { nativeEvent } = syntheticEvent;
     console.warn('WebView error: ', nativeEvent);
   }}
@@ -255,7 +256,7 @@ Example:
 ```jsx
 <WebView
   source={{ uri: 'https://facebook.github.io/react-native' }}
-  onLoad={syntheticEvent => {
+  onLoad={(syntheticEvent) => {
     const { nativeEvent } = syntheticEvent;
     this.url = nativeEvent.url;
   }}
@@ -288,7 +289,7 @@ Example:
 ```jsx
 <WebView
   source={{ uri: 'https://facebook.github.io/react-native' }}
-  onLoadEnd={syntheticEvent => {
+  onLoadEnd={(syntheticEvent) => {
     // update component to be aware of loading status
     const { nativeEvent } = syntheticEvent;
     this.isLoading = nativeEvent.loading;
@@ -322,7 +323,7 @@ Example:
 ```jsx
 <WebView
   source={{ uri: 'https://facebook.github.io/react-native/=' }}
-  onLoadStart={syntheticEvent => {
+  onLoadStart={(syntheticEvent) => {
     // update component to be aware of loading status
     const { nativeEvent } = syntheticEvent;
     this.isLoading = nativeEvent.loading;
@@ -392,7 +393,7 @@ Example:
 ```jsx
 <WebView
   source={{ uri: 'https://facebook.github.io/react-native' }}
-  onHttpError={syntheticEvent => {
+  onHttpError={(syntheticEvent) => {
     const { nativeEvent } = syntheticEvent;
     console.warn(
       'WebView received error status code: ',
@@ -447,7 +448,7 @@ Example:
 ```jsx
 <WebView
   source={{ uri: 'https://facebook.github.io/react-native' }}
-  onNavigationStateChange={navState => {
+  onNavigationStateChange={(navState) => {
     // Keep track of going back navigation within component
     this.canGoBack = navState.canGoBack;
   }}
@@ -483,7 +484,7 @@ Example:
 ```jsx
 <WebView
   source={{ uri: 'https://facebook.github.io/react-native' }}
-  onContentProcessDidTerminate={syntheticEvent => {
+  onContentProcessDidTerminate={(syntheticEvent) => {
     const { nativeEvent } = syntheticEvent;
     console.warn('Content process terminated, reloading', nativeEvent);
     this.refs.webview.reload();
@@ -506,7 +507,7 @@ url
 
 ### `originWhitelist`
 
-List of origin strings to allow being navigated to. The strings allow wildcards and get matched against _just_ the origin (not the full URL). If the user taps to navigate to a new page but the new page is not in this whitelist, the URL will be handled by the OS. The default whitelisted origins are "http://*" and "https://*".
+List of origin strings to allow being navigated to. The strings allow wildcards and get matched against _just_ the origin (not the full URL). If the user taps to navigate to a new page but the new page is not in this whitelist, the URL will be handled by the OS. The default whitelisted origins are "http://_" and "https://_".
 
 | Type             | Required |
 | ---------------- | -------- |
@@ -537,7 +538,7 @@ Example:
 ```jsx
 <WebView
   source={{ uri: 'https://facebook.github.io/react-native' }}
-  renderError={errorName => <Error name={errorName} />}
+  renderError={(errorName) => <Error name={errorName} />}
 />
 ```
 
@@ -590,7 +591,7 @@ Example:
 ```jsx
 <WebView
   source={{ uri: 'https://facebook.github.io/react-native' }}
-  onShouldStartLoadWithRequest={request => {
+  onShouldStartLoadWithRequest={(request) => {
     // Only allow navigating within this website
     return request.url.startsWith('https://facebook.github.io/react-native');
   }}
@@ -1091,6 +1092,16 @@ Example:
 
 `<WebView textZoom={100} />`
 
+### `ignoreSslErrors`
+
+Ignore Ssl errors encountered in the webview.
+
+Works only in debug mode.
+
+| Type    | Required | Platform |
+| ------- | -------- | -------- |
+| boolean | No       | Android  |
+
 ## Methods
 
 ### `extraNativeComponentConfig()`
@@ -1150,30 +1161,34 @@ requestFocus();
 Request the webView to ask for focus. (People working on TV apps might want having a look at this!)
 
 ### `clearFormData()`
+
 (android only)
 
 ```javascript
 clearFormData();
 ```
-Removes the autocomplete popup from the currently focused form field, if present. [developer.android.com reference](https://developer.android.com/reference/android/webkit/WebView.html#clearFormData())
 
+Removes the autocomplete popup from the currently focused form field, if present. [developer.android.com reference](<https://developer.android.com/reference/android/webkit/WebView.html#clearFormData()>)
 
 ### `clearCache(bool)`
+
 (android only)
+
 ```javascript
 clearCache(true);
 ```
 
-Clears the resource cache. Note that the cache is per-application, so this will clear the cache for all WebViews used. [developer.android.com reference](https://developer.android.com/reference/android/webkit/WebView.html#clearCache(boolean))
-
+Clears the resource cache. Note that the cache is per-application, so this will clear the cache for all WebViews used. [developer.android.com reference](<https://developer.android.com/reference/android/webkit/WebView.html#clearCache(boolean)>)
 
 ### `clearHistory()`
+
 (android only)
+
 ```javascript
 clearHistory();
 ```
 
-Tells this WebView to clear its internal back/forward list. [developer.android.com reference](https://developer.android.com/reference/android/webkit/WebView.html#clearHistory())
+Tells this WebView to clear its internal back/forward list. [developer.android.com reference](<https://developer.android.com/reference/android/webkit/WebView.html#clearHistory()>)
 
 ## Other Docs
 
