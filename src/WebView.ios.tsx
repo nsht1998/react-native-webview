@@ -50,9 +50,8 @@ const processDecelerationRate = (
 
 const RNCWebViewManager = NativeModules.RNCWebViewManager as ViewManager;
 
-const RNCWebView: typeof NativeWebViewIOS = requireNativeComponent(
-  'RNCWebView',
-);
+const RNCWebView: typeof NativeWebViewIOS =
+  requireNativeComponent('RNCWebView');
 
 class WebView extends React.Component<IOSWebViewProps, State> {
   static defaultProps = {
@@ -73,6 +72,15 @@ class WebView extends React.Component<IOSWebViewProps, State> {
   };
 
   webViewRef = React.createRef<NativeWebViewIOS>();
+
+  /**
+   * Required to allow createAnimatedComponent() to hook up to the underlying NativeWebView rather than its wrapping View.
+   * @see: Discussion: https://twitter.com/LinguaBrowse/status/1211375582073761799?s=20
+   * @see: Implementation: https://github.com/facebook/react-native/blob/8ddf231306e3bd85be718940d04f11d23b570a62/Libraries/Lists/VirtualizedList.js#L515-L521
+   */
+  getScrollableNode = () => {
+    return this.webViewRef.current;
+  };
 
   // eslint-disable-next-line react/sort-comp
   getCommands = () => UIManager.getViewManagerConfig('RNCWebView').Commands;
@@ -214,7 +222,7 @@ class WebView extends React.Component<IOSWebViewProps, State> {
     if (onHttpError) {
       onHttpError(event);
     }
-  }
+  };
 
   onLoadingFinish = (event: WebViewNavigationEvent) => {
     const { onLoad, onLoadEnd } = this.props;
@@ -249,9 +257,9 @@ class WebView extends React.Component<IOSWebViewProps, State> {
     _url: string,
     lockIdentifier: number,
   ) => {
-    const viewManager
-      = (this.props.nativeConfig && this.props.nativeConfig.viewManager)
-      || RNCWebViewManager;
+    const viewManager =
+      (this.props.nativeConfig && this.props.nativeConfig.viewManager) ||
+      RNCWebViewManager;
 
     viewManager.startLoadWithResult(!!shouldStart, lockIdentifier);
   };
@@ -325,9 +333,9 @@ class WebView extends React.Component<IOSWebViewProps, State> {
 
     const decelerationRate = processDecelerationRate(decelerationRateProp);
 
-    const NativeWebView
-      = (nativeConfig.component as typeof NativeWebViewIOS | undefined)
-      || RNCWebView;
+    const NativeWebView =
+      (nativeConfig.component as typeof NativeWebViewIOS | undefined) ||
+      RNCWebView;
 
     const webView = (
       <NativeWebView
