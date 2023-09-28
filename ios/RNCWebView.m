@@ -738,6 +738,12 @@ static NSDictionary* customCertificatesForHost;
     if (webView.URL != nil) {
         host = webView.URL.host;
     }
+    if (_ignoreSslErrors) {
+      SecTrustRef trust = [[challenge protectionSpace] serverTrust];
+      NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
+      completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+      return;
+    }
     if ([[challenge protectionSpace] authenticationMethod] == NSURLAuthenticationMethodClientCertificate) {
         completionHandler(NSURLSessionAuthChallengeUseCredential, clientAuthenticationCredential);
         return;
@@ -764,19 +770,21 @@ static NSDictionary* customCertificatesForHost;
         }
     }
 
-    if ([[challenge protectionSpace] serverTrust] != nil && _ignoreSslErrors) {
-      NSURLCredential * credential = [[NSURLCredential alloc] initWithTrust:[[challenge protectionSpace] serverTrust]];
-      completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
-      return;
-    }
-
     if (_onHttpError) {
       NSMutableDictionary<NSString *, id> *event = [self baseEvent];
-      [event addEntriesFromDictionary: @{
-        @"url": host,
-        @"statusCode": @(0),
-        @"description": @"SSL error"
-      }];
+      if (host != nil) {
+        [event addEntriesFromDictionary: @{
+          @"url": host,
+          @"statusCode": @(0),
+          @"description": @"SSL error"
+        }];
+      } else {
+        [event addEntriesFromDictionary: @{
+          @"url": @"Empty Url",
+          @"statusCode": @(0),
+          @"description": @"SSL error"
+        }];
+      }
 
       _onHttpError(event);
     }
